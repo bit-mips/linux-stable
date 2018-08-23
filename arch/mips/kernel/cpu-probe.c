@@ -446,7 +446,7 @@ void __init check_bugs32(void)
  */
 static inline int cpu_has_confreg(void)
 {
-#ifdef CONFIG_CPU_R3000
+#if defined(CONFIG_CPU_R3000) && !defined(CONFIG_BITMIPS)
 	extern unsigned long r3k_cache_size(unsigned long);
 	unsigned long size1, size2;
 	unsigned long cfg = read_c0_conf();
