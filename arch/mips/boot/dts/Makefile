@@ -11,6 +11,7 @@ dts-dirs	+= pic32
 dts-dirs	+= qca
 dts-dirs	+= ralink
 dts-dirs	+= xilfpga
+dts-dirs	+= bitmips
 
 obj-y		:= $(addsuffix /, $(dts-dirs))
 

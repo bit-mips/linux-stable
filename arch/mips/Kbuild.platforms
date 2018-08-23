@@ -35,6 +35,7 @@ platforms += sni
 platforms += txx9
 platforms += vr41xx
 platforms += xilfpga
+platforms += bitmips
 
 # include the platform specific files
 include $(patsubst %, $(srctree)/arch/mips/%/Platform, $(platforms))

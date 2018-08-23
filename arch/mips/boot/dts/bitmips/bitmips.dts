@@ -1,0 +1,92 @@
+// SPDX-License-Identifier: GPL-2.0
+/dts-v1/;
+
+/ {
+	#address-cells = <1>;
+	#size-cells = <1>;
+	model = "bit-cs,bit-mips";
+	compatible = "bit-cs,bit-mips";
+
+	chosen {
+		bootargs = "console=ttyS0,115200";
+	};
+
+	memory {
+		device_type = "memory";
+		reg = <0x0 0x08000000>;
+	};
+
+	/*rom {
+		reg = <0x1fc00000 0x00400000>;
+	};*/
+
+	cpus {
+		#address-cells = <1>;
+		#size-cells = <0>;
+		cpu@0 {
+			device_type = "cpu";
+			reg = <0>;
+			clock-frequency = <80000000>;
+			timebase-frequency = <80000000>;
+			compatible = "mips,r3000";
+		};
+	};
+
+	cpuintc: interrupt-controller {
+		#address-cells = <0>;
+		#interrupt-cells = <1>;
+		interrupt-controller;
+		compatible = "mti,cpu-interrupt-controller";
+	};
+
+	/*axi_gpio: gpio@10600000 {
+		#gpio-cells = <1>;
+		compatible = "xlnx,xps-gpio-1.00.a";
+		gpio-controller;
+		reg = <0x10600000 0x10000>;
+		xlnx,all-inputs = <0x0>;
+		xlnx,dout-default = <0x0>;
+		xlnx,gpio-width = <0x16>;
+		xlnx,interrupt-present = <0x0>;
+		xlnx,is-dual = <0x0>;
+		xlnx,tri-default = <0xffffffff>;
+	} ;*/
+
+	axi_uart16550: serial@10000000 {
+		compatible = "ns16550";
+		reg = <0x10000000 0x10000>;
+		clock-frequency = <80000000>;
+
+		reg-shift = <2>;
+		reg-offset = <0x1000>;
+
+		interrupt-parent = <&cpuintc>;
+		interrupts = <0>;
+	};
+
+	axi_ethernetlite: ethernet@10100000 {
+		compatible = "xlnx,xps-ethernetlite-3.00.a";
+		device_type = "network";
+		interrupt-parent = <&cpuintc>;
+		interrupts = <1>;
+		phy-handle = <&phy0>;
+		reg = <0x10100000 0x10000>;
+		xlnx,duplex = <0x1>;
+		xlnx,include-global-buffers = <0x1>;
+		xlnx,include-internal-loopback = <0x0>;
+		xlnx,include-mdio = <0x1>;
+		xlnx,instance = "axi_ethernetlite_inst";
+		xlnx,rx-ping-pong = <0x1>;
+		xlnx,s-axi-id-width = <0x1>;
+		xlnx,tx-ping-pong = <0x1>;
+		xlnx,use-internal = <0x0>;
+		mdio {
+			#address-cells = <1>;
+			#size-cells = <0>;
+			phy0: phy@1 {
+				device_type = "ethernet-phy";
+				reg = <1>;
+			};
+		};
+	};
+};

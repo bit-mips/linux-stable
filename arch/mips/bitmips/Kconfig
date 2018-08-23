@@ -1,0 +1,10 @@
+# SPDX-License-Identifier: GPL-2.0
+choice
+	prompt "Machine type"
+	depends on MACH_BITMIPS
+	default BITMIPS
+
+config BITMIPS
+	bool "BIT-MIPS FPGA SoC"
+
+endchoice
