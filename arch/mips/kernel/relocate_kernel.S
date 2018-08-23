@@ -93,6 +93,8 @@ done:
 	syncw
 	synci		0($0)
 	.set pop
+#elif defined(CONFIG_BITMIPS)
+	/* A unified cache is used on BIT-MIPS */
 #else
 	sync
 #endif
