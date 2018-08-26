@@ -12,7 +12,11 @@ obj-$(CONFIG_PCI)	+= iomap-pci.o
 lib-$(CONFIG_GENERIC_CSUM)	:= $(filter-out csum_partial.o, $(lib-y))
 
 obj-$(CONFIG_CPU_GENERIC_DUMP_TLB) += dump_tlb.o
+ifndef CONFIG_BITMIPS
 obj-$(CONFIG_CPU_R3000)		+= r3k_dump_tlb.o
+else
+obj-$(CONFIG_CPU_R3000)		+= dump_tlb.o
+endif
 obj-$(CONFIG_CPU_TX39XX)	+= r3k_dump_tlb.o
 
 # libgcc-style stuff needed in the kernel
