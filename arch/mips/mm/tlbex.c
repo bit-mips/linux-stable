@@ -219,6 +219,28 @@ static void uasm_bgezl_label(struct uasm_label **l, u32 **p, int instance)
 	}
 }
 
+static void uasm_bgez_hazard(u32 **p, struct uasm_reloc **r, int instance)
+{
+	switch (instance) {
+	case 0 ... 7:
+		uasm_il_bgez(p, r, 0, label_tlbw_hazard_0 + instance);
+		return;
+	default:
+		BUG();
+	}
+}
+
+static void uasm_bgez_label(struct uasm_label **l, u32 **p, int instance)
+{
+	switch (instance) {
+	case 0 ... 7:
+		uasm_build_label(l, *p, label_tlbw_hazard_0 + instance);
+		break;
+	default:
+		BUG();
+	}
+}
+
 /*
  * pgtable bits are assigned dynamically depending on processor feature
  * and statically based on kernel configuration.  This spits out the actual
@@ -533,6 +555,16 @@ void build_tlb_write_entry(u32 **p, struct uasm_label **l,
 		hazard_instance++;
 		uasm_i_nop(p);
 		break;
+
+#ifdef CONFIG_BITMIPS
+	case CPU_R3000:
+		uasm_bgez_hazard(p, r, hazard_instance);
+		tlbw(p);
+		uasm_bgez_label(l, p, hazard_instance);
+		hazard_instance++;
+		uasm_i_nop(p);
+		break;
+#endif
 
 	case CPU_R4600:
 	case CPU_R4700:
@@ -2609,10 +2641,12 @@ void build_tlb_refill_handler(void)
 #endif
 
 	switch (current_cpu_type()) {
+#ifndef CONFIG_BITMIPS
 	case CPU_R2000:
 	case CPU_R3000:
 	case CPU_R3000A:
 	case CPU_R3081E:
+#endif
 	case CPU_TX3912:
 	case CPU_TX3922:
 	case CPU_TX3927:
