@@ -349,7 +349,7 @@
 		cfi_ld	sp, PT_R29, \docfi
 		.endm
 
-#if defined(CONFIG_CPU_R3000) || defined(CONFIG_CPU_TX39XX)
+#if (!defined(CONFIG_BITMIPS) && defined(CONFIG_CPU_R3000)) || defined(CONFIG_CPU_TX39XX)
 
 		.macro	RESTORE_SOME docfi=0
 		.set	push
