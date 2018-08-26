@@ -202,6 +202,10 @@ static inline void setup_protection_map(void)
 
 void cpu_cache_init(void)
 {
+	extern void __weak coherent_cache_init(void);
+
+	coherent_cache_init();
+
 	if (cpu_has_3k_cache) {
 		extern void __weak r3k_cache_init(void);
 
