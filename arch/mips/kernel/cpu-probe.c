@@ -1181,6 +1181,12 @@ static inline void cpu_probe_legacy(struct cpuinfo_mips *c, unsigned int cpu)
 			c->options |= MIPS_CPU_FPU;
 		c->tlbsize = 64;
 		break;
+	case 0: /* unspecified (BIT-MIPS) */
+		c->cputype = CPU_R3000;
+		__cpu_name[cpu] = "R3000-compat-BITMIPS";
+		c->options = MIPS_CPU_TLB | MIPS_CPU_NOFPUEX | MIPS_CPU_COUNTER;
+		c->tlbsize = 64;
+		break;
 	case PRID_IMP_R3000:
 		if ((c->processor_id & PRID_REV_MASK) == PRID_REV_R3000A) {
 			if (cpu_has_confreg()) {

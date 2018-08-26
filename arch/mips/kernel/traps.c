@@ -2201,7 +2201,11 @@ void per_cpu_trap_init(bool is_boot_cpu)
 	 *  o read IntCtl.IPPCI to determine the performance counter interrupt
 	 *  o read IntCtl.IPFDC to determine the fast debug channel interrupt
 	 */
+#ifdef CONFIG_BITMIPS
+	if (1) {
+#else
 	if (cpu_has_mips_r2_r6) {
+#endif
 		/*
 		 * We shouldn't trust a secondary core has a sane EBASE register
 		 * so use the one calculated by the boot CPU.
