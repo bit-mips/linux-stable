@@ -13,7 +13,7 @@
 
 #include <asm/prom.h>
 
-#define XILFPGA_UART_BASE	0xb0000000
+#define XILFPGA_UART_BASE	0xb0001000
 
 const char *get_system_type(void)
 {
